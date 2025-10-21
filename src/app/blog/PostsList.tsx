@@ -1,7 +1,7 @@
 import { PostCard } from "@/components/sanity/post-card";
-import type { PostListItem } from "@/lib/sanity.queries";
+import type { SanityBlogPost } from "@/lib/sanity";
 
-export function PostsList({ posts }: { posts: PostListItem[] }) {
+export function PostsList({ posts }: { posts: SanityBlogPost[] }) {
   if (!posts?.length) return null;
   return (
     <section className="container py-12">

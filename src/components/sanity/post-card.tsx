@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { urlFor } from "@/lib/sanity.client";
-import type { PostListItem } from "@/lib/sanity.queries";
+import type { SanityBlogPost } from "@/lib/sanity";
 
-export function PostCard({ post }: { post: PostListItem }) {
+export function PostCard({ post }: { post: SanityBlogPost }) {
   const img = post.mainImage ? urlFor(post.mainImage)?.width(800).height(500).url() : undefined;
-  const reading = Math.max(post.readingMinutes ?? 0, 1);
+  const reading = Math.max(post.readingTime ?? 1, 1);
   return (
     <Link href={`/blog/${post.slug?.current}`} className="group block overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] transition-transform hover:-translate-y-1">
       {img && (
