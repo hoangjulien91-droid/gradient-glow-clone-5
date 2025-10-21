@@ -2,33 +2,41 @@
 
 import React, { useRef } from 'react';
 import Image from 'next/image';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 import { Shield, Sparkles, ArrowRight, Award, Clock, Check } from 'lucide-react';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  // ✅ Accessibilité: Respecter les préférences utilisateur
+  const prefersReducedMotion = useReducedMotion();
+  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"]
   });
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const y4 = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  // ✅ Performance: Désactiver le parallax si motion réduite
+  const y1 = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [0, 200]);
+  const y2 = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [0, -150]);
+  const y3 = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [0, 100]);
+  const y4 = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [0, -50]);
 
+  // ✅ Accessibilité: Animations adaptatives selon préférences
   const fadeIn = (delay: number = 0) => ({
-    initial: { opacity: 0, y: 20 },
+    initial: prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
-    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1], delay },
+    transition: prefersReducedMotion 
+      ? { duration: 0 } 
+      : { duration: 0.5, delay },
     viewport: { once: true, amount: 0.2 }
   });
 
   // Animation simplifiée pour mobile sans délai
   const mobileQuickFade = {
-    initial: { opacity: 0, y: 15 },
+    initial: prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 },
     whileInView: { opacity: 1, y: 0 },
-    transition: { duration: 0.4, ease: "easeOut" },
+    transition: prefersReducedMotion ? { duration: 0 } : { duration: 0.4 },
     viewport: { once: true, amount: 0.1 }
   };
 
@@ -36,25 +44,30 @@ const Hero = () => {
     <section id="accueil" ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f1a]/95 via-[#1e293b]/93 to-[#2C3E50]/88 z-10"></div>
+        {/* ✅ Performance CRITIQUE: Image Hero = LCP - PRIORITY obligatoire */}
         <Image
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/45fe22ff-1e47-495b-9256-16a46314668c-website-fun-glow-upgrade-clone-vercel-app/assets/images/next-541561-hero-background-CWRRosAy-1-2.jpg?"
           alt=""
           fill
           className="object-cover brightness-[0.35]"
-          loading="lazy"
-          decoding="async"
-          fetchPriority="low"
-          quality={75}
+          priority
+          quality={85}
           sizes="100vw"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
           aria-hidden="true"
         />
       </div>
 
-      <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
-        <motion.div style={{ y: y1 }} className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#4A7BA7]/40 to-[#3b82f6]/25 top-1/4 left-1/4 blur-[120px]"></motion.div>
-        <motion.div style={{ y: y2 }} className="absolute w-[500px] h-[500px] rounded-full bg-gradient-to-br from-[#EA6C4F]/35 to-[#ff8566]/20 top-1/2 right-1/4 blur-[100px]"></motion.div>
-        <motion.div style={{ y: y3 }} className="absolute w-[450px] h-[450px] rounded-full bg-gradient-to-br from-[#8B5CF6]/25 to-[#EC4899]/15 bottom-1/4 left-1/2 blur-[110px]"></motion.div>
-        <motion.div style={{ y: y4 }} className="absolute w-[350px] h-[350px] rounded-full bg-gradient-to-br from-[#F97316]/30 to-[#EA6C4F]/20 top-1/3 right-1/3 blur-[90px]"></motion.div>
+      {/* ✅ Performance: Blur gradients conditionnels (coûteux sur mobile) */}
+      <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none hidden md:block">
+        <motion.div style={{ y: y1 }} className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#4A7BA7]/40 to-[#3b82f6]/25 top-1/4 left-1/4 blur-[120px] will-change-transform"></motion.div>
+        <motion.div style={{ y: y2 }} className="absolute w-[500px] h-[500px] rounded-full bg-gradient-to-br from-[#EA6C4F]/35 to-[#ff8566]/20 top-1/2 right-1/4 blur-[100px] will-change-transform"></motion.div>
+      </div>
+      {/* Version mobile simplifiée sans parallax */}
+      <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none md:hidden">
+        <div className="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-br from-[#4A7BA7]/30 to-[#3b82f6]/20 top-1/4 left-1/4 blur-[80px]"></div>
+        <div className="absolute w-[350px] h-[350px] rounded-full bg-gradient-to-br from-[#EA6C4F]/25 to-[#ff8566]/15 top-1/2 right-1/4 blur-[70px]"></div>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-12 z-20 relative py-24 sm:py-32 lg:py-40">

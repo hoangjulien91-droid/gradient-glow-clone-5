@@ -5,10 +5,16 @@ import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 
+// ✅ Performance: Optimisation des fonts avec preload et ajustements
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
+  preload: true,
+  // ✅ Performance: Charger uniquement les poids utilisés
+  weight: ["300", "400", "600", "700"],
+  // ✅ Performance: Ajustements pour réduire CLS
+  adjustFontFallback: true,
 });
 
 const playfair = Playfair_Display({
@@ -16,6 +22,8 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   weight: ["600", "700"],
   display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -65,17 +73,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${inter.variable} ${playfair.variable}`}>
+      <head>
+        {/* ✅ Performance: DNS Prefetch pour domaines externes */}
+        <link rel="dns-prefetch" href="https://slelguoygbfzlpylpxfs.supabase.co" />
+        <link rel="dns-prefetch" href="https://wpgtsqjcdosuegpophvv.supabase.co" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+        <link rel="preconnect" href="https://slelguoygbfzlpylpxfs.supabase.co" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+      </head>
       <body className="antialiased">
         <ErrorReporter />
+        {/* ✅ Performance: Charger le script en lazy (non-critique) */}
         <Script
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           data-target-origin="*"
           data-message-type="ROUTE_CHANGE"
           data-include-search-params="true"
           data-only-in-iframe="true"
-          data-debug="true"
-          data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
+          data-debug="false"
+          data-custom-data='{"appName": "Julien Hoang Detective", "version": "1.0.0"}'
         />
         {children}
         <VisualEditsMessenger />

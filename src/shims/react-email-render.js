@@ -9,4 +9,6 @@ export function render(node) {
   }
 }
 
-export default { render };
+const renderShim = { render };
+
+export default renderShim;

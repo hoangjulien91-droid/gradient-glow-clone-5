@@ -1,53 +1,14 @@
 import type { NextConfig } from "next";
-import path from "node:path";
-import withBundleAnalyzer from '@next/bundle-analyzer';
-
-const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
+import withBundleAnalyzer from "@next/bundle-analyzer";
+import baseConfig from "./next.config";
 
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: true,
 });
 
-const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-      {
-        protocol: 'http',
-        hostname: '**',
-      },
-    ],
-    formats: ['image/avif', 'image/webp'],
-  },
-  outputFileTracingRoot: path.resolve(__dirname, '../../'),
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  turbopack: {
-    rules: {
-      "*.{jsx,tsx}": {
-        loaders: [LOADER]
-      }
-    }
-  },
-  experimental: {
-    optimizePackageImports: [
-      'lucide-react',
-      'framer-motion',
-      '@radix-ui/react-accordion',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-dropdown-menu',
-      '@radix-ui/react-popover',
-      '@radix-ui/react-tabs',
-      '@radix-ui/react-tooltip',
-    ],
-  },
-};
+// ✅ Performance: Configuration pour analyser le bundle
+// Usage: ANALYZE=true npm run build
+const config: NextConfig = bundleAnalyzer(baseConfig);
 
-export default bundleAnalyzer(nextConfig);
+export default config;

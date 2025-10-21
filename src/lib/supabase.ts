@@ -1,23 +1,47 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wpgtsqjcdosuegpophvv.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwZ3RzcWpjZG9zdWVncG9waHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwMTQ4MTIsImV4cCI6MjA3MzU5MDgxMn0.NDVPPOABuSsBUMTzCvbsrcTE7Kf2DuJYBR_JVPk3b0M';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwZ3RzcWpjZG9zdWVncG9waHZ2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODAxNDgxMiwiZXhwIjoyMDczNTkwODEyfQ.wUEG-t35GSsJ_KEJb83j_ylH7lw0HZdqOsjSHvX1Q6s';
+// ✅ Sécurité: JAMAIS de fallback avec des clés hardcodées
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL');
+}
+if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY');
+}
 
-// Client-side Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Server-side Supabase client with service role (for API routes)
-export const supabaseAdmin = createClient(
+// ✅ Performance: Client-side Supabase avec cache optimisé
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+  },
+  global: {
+    headers: {
+      'x-application-name': 'julien-hoang-detective',
+    },
+  },
+});
+
+// ✅ Sécurité: Server-side client (API routes uniquement)
+export const supabaseAdmin = supabaseServiceKey ? createClient(
   supabaseUrl,
   supabaseServiceKey,
   {
     auth: {
       autoRefreshToken: false,
       persistSession: false
-    }
+    },
+    global: {
+      headers: {
+        'x-application-name': 'julien-hoang-detective-admin',
+      },
+    },
   }
-);
+) : null;
 
 // Types for database tables
 export interface ContactSubmission {

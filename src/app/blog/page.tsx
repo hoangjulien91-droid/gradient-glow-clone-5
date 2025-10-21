@@ -1,12 +1,12 @@
 import dynamic from "next/dynamic";
-import Navigation from "@/components/sections/navigation";
-import Footer from "@/components/sections/footer";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { AutoPageLayout } from "@/components/layout";
 import type { Metadata } from "next";
-import { PostsList } from "./PostsList";
 import { fetchBlogPosts } from "./page.server";
+import type { SanityBlogPost } from "@/lib/sanity";
+import type { PostListItem } from "@/lib/sanity.queries";
 
-export const revalidate = 60;
+// ✅ Performance: ISR avec revalidation toutes les heures
+export const revalidate = 3600; // 1 heure au lieu de 60s
 
 const BlogHero = dynamic(() => import("@/components/sections/blog-hero"), {
   loading: () => <div className="min-h-screen bg-bg-primary" />,
@@ -25,17 +25,33 @@ export const metadata: Metadata = {
   },
 };
 
+// Adapter les posts de Sanity au format attendu par BlogGrid
+function adaptPosts(posts: PostListItem[]): SanityBlogPost[] {
+  return posts.map(post => ({
+    _id: post._id,
+    title: post.title,
+    slug: post.slug,
+    publishedAt: post.publishedAt || '',
+    excerpt: post.excerpt || '',
+    body: undefined,
+    mainImage: post.mainImage ? { asset: { url: post.mainImage.asset?.url || '' } } : { asset: { url: '' } },
+    author: post.author ? { name: post.author.name, image: post.author.image } : { name: '' },
+    categories: Array.isArray(post.categories) 
+      ? post.categories.map((cat, idx) => typeof cat === 'string' 
+          ? { _id: `cat-${idx}`, title: cat, slug: { current: cat.toLowerCase().replace(/\s+/g, '-') } } 
+          : cat)
+      : [],
+    readingTime: post.readingMinutes || 5,
+  }));
+}
+
 export default async function BlogPage() {
   const posts = await fetchBlogPosts();
+  const adaptedPosts = adaptPosts(posts);
   return (
-    <div className="min-h-screen bg-bg-primary">
-      <Navigation />
-      <Breadcrumb items={[{ label: "Blog" }]} />
-      <main>
-        <BlogHero />
-        <BlogGrid posts={posts} />
-      </main>
-      <Footer />
-    </div>
+    <AutoPageLayout>
+      <BlogHero />
+      <BlogGrid posts={adaptedPosts} />
+    </AutoPageLayout>
   );
 }

@@ -1,7 +1,5 @@
 import dynamic from "next/dynamic";
-import Navigation from "@/components/sections/navigation";
-import Footer from "@/components/sections/footer";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { AutoPageLayout } from "@/components/layout";
 
 const ContactHero = dynamic(() => import("@/components/sections/contact-hero"));
 const ContactSection = dynamic(() => import("@/components/sections/contact"));
@@ -15,16 +13,11 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-bg-primary">
-      <Navigation />
-      <Breadcrumb items={[{ label: "Contact" }]} />
-      <main>
-        <ContactHero />
-        <ContactSection />
-        <ContactConsultation />
-        <ContactEmergency />
-      </main>
-      <Footer />
-    </div>
+    <AutoPageLayout>
+      <ContactHero />
+      <ContactSection />
+      <ContactConsultation />
+      <ContactEmergency />
+    </AutoPageLayout>
   );
 }

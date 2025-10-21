@@ -9,10 +9,11 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
   if (!post) return { title: "Article" };
   const ogUrl = post.ogImage
     ? urlFor(post.ogImage)?.width(1200).height(630).url()
@@ -32,7 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PostPage({ params }: Props) {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
   if (!post) return notFound();
 
   const coverUrl = post.mainImage ? urlFor(post.mainImage)?.width(1600).height(900).url() : undefined;

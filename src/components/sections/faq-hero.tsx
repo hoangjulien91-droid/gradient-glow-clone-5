@@ -5,7 +5,7 @@ import { MessageCircleQuestion } from "lucide-react";
 
 const FAQHero = () => {
   return (
-    <section className="relative pt-32 sm:pt-40 pb-20 sm:pb-28 bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary overflow-hidden">
+    <section className="relative pt-40 sm:pt-48 pb-20 sm:pb-28 bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary overflow-hidden">
       {/* Background gradients */}
       <div className="absolute top-20 -left-40 w-[500px] h-[500px] bg-gradient-to-br from-accent-blue/20 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-20 -right-40 w-[500px] h-[500px] bg-gradient-to-br from-accent-purple/20 to-transparent rounded-full blur-[100px] pointer-events-none"></div>

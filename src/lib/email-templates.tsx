@@ -11,6 +11,7 @@ interface ConfirmationEmailProps {
 
 export const ConfirmationEmail = ({ name, message }: ConfirmationEmailProps) => (
   <html>
+    {/* eslint-disable-next-line @next/next/no-head-element */}
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -221,6 +222,7 @@ export const NotificationEmail = ({
   timestamp 
 }: NotificationEmailProps) => (
   <html>
+    {/* eslint-disable-next-line @next/next/no-head-element */}
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />

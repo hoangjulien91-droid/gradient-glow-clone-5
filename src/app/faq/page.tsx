@@ -1,7 +1,5 @@
 import dynamic from "next/dynamic";
-import Navigation from "@/components/sections/navigation";
-import Footer from "@/components/sections/footer";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { AutoPageLayout } from "@/components/layout";
 
 const FAQHero = dynamic(() => import("@/components/sections/faq-hero"));
 const FAQContent = dynamic(() => import("@/components/sections/faq-content"));
@@ -14,15 +12,10 @@ export const metadata = {
 
 export default function FAQPage() {
   return (
-    <div className="min-h-screen bg-bg-primary">
-      <Navigation />
-      <Breadcrumb items={[{ label: "FAQ" }]} />
-      <main>
-        <FAQHero />
-        <FAQContent />
-        <FAQCta />
-      </main>
-      <Footer />
-    </div>
+    <AutoPageLayout>
+      <FAQHero />
+      <FAQContent />
+      <FAQCta />
+    </AutoPageLayout>
   );
 }

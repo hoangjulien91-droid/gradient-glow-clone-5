@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowRight, Tag, BookOpen } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 import type { SanityBlogPost } from "@/lib/sanity";
 
 // Données mockées (à remplacer par fetch Sanity)
@@ -22,7 +23,7 @@ const MOCK_POSTS: SanityBlogPost[] = [
       name: "Julien Hoang",
     },
     categories: [
-      { title: "Conseils Juridiques", slug: { current: "conseils-juridiques" } },
+      { _id: "cat-1", title: "Conseils Juridiques", slug: { current: "conseils-juridiques" } },
     ],
     readingTime: 8,
   },
@@ -41,7 +42,7 @@ const MOCK_POSTS: SanityBlogPost[] = [
       name: "Julien Hoang",
     },
     categories: [
-      { title: "Victimologie", slug: { current: "victimologie" } },
+      { _id: "cat-2", title: "Victimologie", slug: { current: "victimologie" } },
     ],
     readingTime: 10,
   },
@@ -60,7 +61,7 @@ const MOCK_POSTS: SanityBlogPost[] = [
       name: "Julien Hoang",
     },
     categories: [
-      { title: "Harcèlement", slug: { current: "harcelement" } },
+      { _id: "cat-3", title: "Harcèlement", slug: { current: "harcelement" } },
     ],
     readingTime: 12,
   },
@@ -79,7 +80,7 @@ const MOCK_POSTS: SanityBlogPost[] = [
       name: "Julien Hoang",
     },
     categories: [
-      { title: "Arnaques", slug: { current: "arnaques" } },
+      { _id: "cat-4", title: "Arnaques", slug: { current: "arnaques" } },
     ],
     readingTime: 6,
   },
@@ -98,7 +99,7 @@ const MOCK_POSTS: SanityBlogPost[] = [
       name: "Julien Hoang",
     },
     categories: [
-      { title: "Enquêtes Privées", slug: { current: "enquetes-privees" } },
+      { _id: "cat-5", title: "Enquêtes Privées", slug: { current: "enquetes-privees" } },
     ],
     readingTime: 9,
   },
@@ -117,7 +118,7 @@ const MOCK_POSTS: SanityBlogPost[] = [
       name: "Julien Hoang",
     },
     categories: [
-      { title: "Harcèlement", slug: { current: "harcelement" } },
+      { _id: "cat-3", title: "Harcèlement", slug: { current: "harcelement" } },
     ],
     readingTime: 11,
   },
@@ -297,13 +298,13 @@ export default function BlogGrid({ posts }: BlogGridProps) {
             Au-delà des conseils en ligne, je propose un accompagnement sur mesure 
             pour votre situation spécifique.
           </p>
-          <a
+          <Link
             href="/#contact"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl gradient-cta-bg text-white font-semibold hover:shadow-button-glow transition-all duration-300 hover:scale-105"
           >
             Prendre rendez-vous
             <ArrowRight className="w-5 h-5" />
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

@@ -15,8 +15,8 @@ export function PostCard({ post }: { post: SanityBlogPost }) {
         {post.categories && post.categories.length > 0 && (
           <div className="mb-3 flex flex-wrap gap-2">
             {post.categories.map((cat) => (
-              <span key={cat} className="inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-primary)]/60 px-2.5 py-1 text-xs text-[var(--color-text-secondary)]">
-                {cat}
+              <span key={cat._id} className="inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-primary)]/60 px-2.5 py-1 text-xs text-[var(--color-text-secondary)]">
+                {cat.title}
               </span>
             ))}
           </div>

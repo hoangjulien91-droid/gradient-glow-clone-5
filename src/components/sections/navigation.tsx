@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone, Shield } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,19 +48,30 @@ export default function Navigation() {
     { href: "/contact", label: "Contact" },
   ];
 
+  // Détecter si on est sur une page avec breadcrumb (toutes sauf l'accueil)
+  const isHomePage = pathname === "/";
+  const shouldBeOpaque = !isHomePage || isScrolled;
+
+  // La hauteur est contrôlée par le padding `py-3` (12px + 40px icon + 12px = 64px)
+  const headerHeightClass = "h-16"; // h-16 = 64px
+
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-bg-primary/95 backdrop-blur-lg shadow-lg"
-          : "bg-transparent"
+      // Header toujours sticky, opaque sauf sur la page d'accueil (au top)
+      className={`fixed top-0 left-0 right-0 z-[var(--z-header)] transition-all duration-300 ${headerHeightClass} ${
+        isHomePage
+          ? isScrolled
+            ? "bg-bg-primary/95 backdrop-blur-lg shadow-lg"
+            : "bg-transparent"
+          : "bg-bg-primary shadow-xl border-b border-white/10"
       }`}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-12">
-        <div className="flex items-center justify-between py-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 h-full">
+        {/* `h-full` et `items-center` pour centrer verticalement */}
+        <div className="flex items-center justify-between h-full">
           <div className="flex items-center gap-3 sm:gap-4">
             <Link href="/" className="flex items-center gap-3 group relative z-10 text-white">
               <div className="relative flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14">

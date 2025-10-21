@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const ContactHero = () => {
   return (
-    <section className="bg-bg-primary pt-32 sm:pt-40 pb-20 sm:pb-28 relative overflow-hidden">
+    <section className="bg-bg-primary pt-40 sm:pt-48 pb-20 sm:pb-28 relative overflow-hidden">
       <div className="absolute inset-0 z-0 opacity-20">
         <div className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-br from-accent-blue/30 to-transparent top-0 left-1/4 blur-[120px]"></div>
         <div className="absolute w-[500px] h-[500px] rounded-full bg-gradient-to-br from-accent-coral/20 to-transparent top-1/4 right-1/4 blur-[100px]"></div>

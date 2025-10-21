@@ -5,7 +5,7 @@ import { BookOpen, TrendingUp, Shield } from "lucide-react";
 
 export default function BlogHero() {
   return (
-    <section className="relative bg-bg-primary pt-32 pb-20 overflow-hidden">
+    <section className="relative bg-bg-primary pt-40 pb-20 overflow-hidden">
       {/* Gradient overlay */}
       <div className="absolute inset-0 gradient-hero-overlay pointer-events-none" />
 

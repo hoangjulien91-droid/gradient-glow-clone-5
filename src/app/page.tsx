@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import type { Metadata } from "next";
-import Navigation from "@/components/sections/navigation";
+import { AutoPageLayout } from "@/components/layout";
 import Hero from "@/components/sections/hero";
 import StatsSection from "@/components/sections/stats";
 import AboutSection from "@/components/sections/about";
@@ -34,38 +34,33 @@ const FAQSection = dynamic(() => import("@/components/sections/faq"), {
 const ContactSection = dynamic(() => import("@/components/sections/contact"), {
   loading: () => <div className="min-h-screen bg-bg-primary" />,
 });
-const Footer = dynamic(() => import("@/components/sections/footer"));
 
 export default function Home() {
   return (
-    <div id="accueil" className="min-h-screen bg-bg-primary">
-      <Navigation />
-      <main>
-        {/* schema.org JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "ProfessionalService",
-              name: "Julien Hoang – Détective Privé Victimologue",
-              url: `${baseUrl}/`,
-              description:
-                "Détective privé et victimologue agréé CNAPS, 15 ans d'expérience. Accompagnement des victimes, constitution de dossier, collecte de preuves.",
-              areaServed: "France",
-              sameAs: [] as string[],
-            }),
-          }}
-        />
-        <Hero />
-        <StatsSection />
-        <AboutSection />
-        <ServicesSection />
-        <CtaReadySection />
-        <FAQSection />
-        <ContactSection />
-      </main>
-      <Footer />
-    </div>
+    <AutoPageLayout>
+      {/* schema.org JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ProfessionalService",
+            name: "Julien Hoang – Détective Privé Victimologue",
+            url: `${baseUrl}/`,
+            description:
+              "Détective privé et victimologue agréé CNAPS, 15 ans d'expérience. Accompagnement des victimes, constitution de dossier, collecte de preuves.",
+            areaServed: "France",
+            sameAs: [] as string[],
+          }),
+        }}
+      />
+      <Hero />
+      <StatsSection />
+      <AboutSection />
+      <ServicesSection />
+      <CtaReadySection />
+      <FAQSection />
+      <ContactSection />
+    </AutoPageLayout>
   );
 }

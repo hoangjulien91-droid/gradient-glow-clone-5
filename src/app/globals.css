@@ -26,6 +26,20 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  /* ===================================
+     LAYOUT CONFIGURATION
+     =================================== */
+  --header-height: 64px;
+  --breadcrumb-height: 45px;
+  
+  /* Z-Index Hierarchy */
+  --z-modal: 100;
+  --z-header: 90;
+  --z-breadcrumb: 80;
+  --z-main: 70;
+  --z-sidebar: 60;
+  --z-footer: 50;
+
   /* Shadcn/UI colors - adapted for dark theme */
   --color-background: #1a202c;
   --color-foreground: #ffffff;

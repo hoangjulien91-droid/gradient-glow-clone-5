@@ -1,7 +1,5 @@
 import dynamic from "next/dynamic";
-import Navigation from "@/components/sections/navigation";
-import Footer from "@/components/sections/footer";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { AutoPageLayout } from "@/components/layout";
 import type { Metadata } from "next";
 
 const TeamSection = dynamic(() => import("@/components/sections/team"), {
@@ -19,13 +17,8 @@ export const metadata: Metadata = {
 
 export default function TeamPage() {
   return (
-    <div className="min-h-screen bg-bg-primary">
-      <Navigation />
-      <Breadcrumb items={[{ label: "Équipe" }]} />
-      <main>
-        <TeamSection />
-      </main>
-      <Footer />
-    </div>
+    <AutoPageLayout>
+      <TeamSection />
+    </AutoPageLayout>
   );
 }

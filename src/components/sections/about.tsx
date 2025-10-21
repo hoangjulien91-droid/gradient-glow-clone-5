@@ -20,11 +20,8 @@ const AboutSection = () => {
 
   const fadeIn = (delay = 0) => ({
     initial: { opacity: 0, y: 20 },
-    whileInView: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, delay, ease: "easeInOut" },
-    },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.5, delay },
     viewport: { once: true, amount: 0.3 },
   });
 
@@ -111,12 +108,18 @@ const AboutSection = () => {
 
         <motion.div
           initial="initial"
-          whileInView="whileInView"
+          whileInView="animate"
           viewport={{ once: true }}
-          variants={{ whileInView: { transition: { staggerChildren: 0.15 } } }}
+          variants={{ animate: { transition: { staggerChildren: 0.15 } } }}
           className="grid md:grid-cols-2 gap-8 mt-16 lg:mt-24"
         >
-          <motion.div variants={fadeIn().whileInView} className="glass-card p-8 rounded-3xl border border-white/10 hover:border-accent-blue/50 shadow-lg hover:shadow-glow transition-all duration-300 transform-gpu hover:-translate-y-2">
+          <motion.div 
+            variants={{
+              initial: { opacity: 0, y: 20 },
+              animate: { opacity: 1, y: 0 }
+            }}
+            className="glass-card p-8 rounded-3xl border border-white/10 hover:border-accent-blue/50 shadow-lg hover:shadow-glow transition-all duration-300 transform-gpu hover:-translate-y-2"
+          >
             <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-gradient-to-br from-accent-blue/20 to-accent-blue/5">
               <Scale className="w-7 h-7 text-accent-blue" />
             </div>
@@ -128,7 +131,13 @@ const AboutSection = () => {
             </p>
           </motion.div>
 
-          <motion.div variants={fadeIn().whileInView} className="glass-card p-8 rounded-3xl border border-white/10 hover:border-accent-coral/50 shadow-lg hover:shadow-glow transition-all duration-300 transform-gpu hover:-translate-y-2">
+          <motion.div 
+            variants={{
+              initial: { opacity: 0, y: 20 },
+              animate: { opacity: 1, y: 0 }
+            }}
+            className="glass-card p-8 rounded-3xl border border-white/10 hover:border-accent-coral/50 shadow-lg hover:shadow-glow transition-all duration-300 transform-gpu hover:-translate-y-2"
+          >
             <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-gradient-to-br from-accent-coral/20 to-accent-coral/5">
               <Heart className="w-7 h-7 text-accent-coral" />
             </div>

@@ -106,7 +106,7 @@ const servicesData: Service[] = [
 ];
 
 const ServiceCard: FC<{ service: Service }> = ({ service }) => (
-  <motion.div
+  <motion.article
     variants={{
       hidden: { opacity: 0, y: 30 },
       visible: {
@@ -116,6 +116,8 @@ const ServiceCard: FC<{ service: Service }> = ({ service }) => (
       },
     }}
     className="group relative bg-white dark:bg-bg-secondary rounded-3xl p-8 overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.1)] hover:shadow-glow hover:-translate-y-2 h-full flex flex-col"
+    role="article"
+    aria-labelledby={`service-${service.title.replace(/\s+/g, '-').toLowerCase()}`}
   >
     <div className="relative z-10 flex flex-col flex-1">
       <div
@@ -126,16 +128,19 @@ const ServiceCard: FC<{ service: Service }> = ({ service }) => (
       >
         <service.icon className={cn('w-8 h-8 transition-transform duration-300 group-hover:scale-110', service.iconColor)} />
       </div>
-      <h3 className="font-display text-2xl font-bold text-slate-800 dark:text-text-primary mb-2">
+      <h3 
+        id={`service-${service.title.replace(/\s+/g, '-').toLowerCase()}`}
+        className="font-display text-2xl font-bold text-slate-800 dark:text-text-primary mb-2"
+      >
         {service.title}
       </h3>
       <p className="font-semibold text-slate-600 dark:text-text-secondary mb-6">
         {service.subtitle}
       </p>
-      <ul className="space-y-3 mt-auto">
+      <ul className="space-y-3 mt-auto" role="list">
         {service.features.map((feature) => (
           <li key={feature} className="flex items-start gap-3">
-            <Check className="w-5 h-5 text-success-green bg-success-green/10 rounded-full p-0.5 mt-0.5 flex-shrink-0" />
+            <Check className="w-5 h-5 text-success-green bg-success-green/10 rounded-full p-0.5 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <span className="text-slate-700 dark:text-gray-300">
               {feature}
             </span>
@@ -143,7 +148,7 @@ const ServiceCard: FC<{ service: Service }> = ({ service }) => (
         ))}
       </ul>
     </div>
-  </motion.div>
+  </motion.article>
 );
 
 const ServicesSection = () => {

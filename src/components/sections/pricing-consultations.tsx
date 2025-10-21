@@ -4,7 +4,32 @@ import { motion } from "framer-motion";
 import { Check, Phone, Video, FileText, Package, Heart } from "lucide-react";
 import Link from "next/link";
 
-const consultations = [
+interface ConsultationItem {
+  label?: string;
+  title: string;
+  subtitle?: string;
+  price: string;
+  duration?: string;
+  validity?: string;
+  originalPrice?: string;
+  description: string;
+  features: string[];
+  icon?: any;
+  color?: string;
+  popular?: boolean;
+  savings?: boolean;
+  addon?: boolean;
+  free?: boolean;
+  cta?: string;
+}
+
+interface ConsultationCategory {
+  category: string;
+  description?: string;
+  items: ConsultationItem[];
+}
+
+const consultations: ConsultationCategory[] = [
   {
     category: "Consultations Principales",
     items: [
@@ -23,6 +48,7 @@ const consultations = [
         ],
         icon: Phone,
         color: "success-green",
+        addon: false,
       },
       {
         label: "Populaire",
@@ -40,6 +66,7 @@ const consultations = [
         icon: Video,
         color: "accent-blue",
         popular: true,
+        addon: false,
       },
       {
         title: "Analyse Écrite du Dossier",
@@ -55,6 +82,7 @@ const consultations = [
         ],
         icon: FileText,
         color: "accent-purple",
+        addon: false,
       },
       {
         label: "Économie 150 €",
@@ -75,6 +103,7 @@ const consultations = [
         icon: Package,
         color: "accent-coral",
         savings: true,
+        addon: false,
       },
     ],
   },
@@ -92,6 +121,7 @@ const consultations = [
         icon: Heart,
         color: "accent-salmon",
         cta: "Prendre rendez-vous",
+        addon: false,
       },
     ],
   },
