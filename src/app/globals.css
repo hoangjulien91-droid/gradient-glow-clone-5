@@ -31,6 +31,8 @@
      =================================== */
   --header-height: 64px;
   --breadcrumb-height: 45px;
+  /* Hero gradient used to match header at top of page */
+  --hero-gradient: linear-gradient(135deg, rgba(10,15,26,0.95) 0%, rgba(30,41,59,0.93) 50%, rgba(44,62,80,0.88) 100%);
   
   /* Z-Index Hierarchy */
   --z-modal: 100;

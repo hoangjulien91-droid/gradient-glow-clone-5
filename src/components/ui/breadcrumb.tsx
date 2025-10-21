@@ -22,7 +22,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       aria-label="breadcrumb"
-      className={`w-full border-b border-white/5 bg-bg-primary/95 backdrop-blur-md sticky z-[var(--z-breadcrumb)] ${className}`}
+      className={`w-full border-b border-white/5 bg-bg-primary/95 backdrop-blur-md lg:sticky lg:z-[var(--z-breadcrumb)] ${className}`}
       style={{ top: 'var(--header-height)' }}
     >
       <ol
