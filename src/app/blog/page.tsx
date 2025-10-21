@@ -33,9 +33,7 @@ export default async function BlogPage() {
       <Breadcrumb items={[{ label: "Blog" }]} />
       <main>
         <BlogHero />
-        {/* Existing mock grid remains for design; Sanity posts are listed below */}
-        <BlogGrid />
-        <PostsList posts={posts} />
+        <BlogGrid posts={posts} />
       </main>
       <Footer />
     </div>

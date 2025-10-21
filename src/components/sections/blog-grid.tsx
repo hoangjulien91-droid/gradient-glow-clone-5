@@ -3,33 +3,7 @@
 import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowRight, Tag, BookOpen } from "lucide-react";
 import { useState } from "react";
-
-// Types pour Sanity CMS (à utiliser lors de l'intégration)
-export interface SanityBlogPost {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  publishedAt: string;
-  excerpt: string;
-  mainImage: {
-    asset: {
-      url: string;
-    };
-  };
-  author: {
-    name: string;
-    image?: {
-      asset: {
-        url: string;
-      };
-    };
-  };
-  categories: Array<{
-    title: string;
-    slug: { current: string };
-  }>;
-  readingTime: number; // en minutes
-}
+import type { SanityBlogPost } from "@/lib/sanity";
 
 // Données mockées (à remplacer par fetch Sanity)
 const MOCK_POSTS: SanityBlogPost[] = [
@@ -149,22 +123,32 @@ const MOCK_POSTS: SanityBlogPost[] = [
   },
 ];
 
-const CATEGORIES = [
-  "Tous les articles",
-  "Victimologie",
-  "Conseils Juridiques",
-  "Harcèlement",
-  "Arnaques",
-  "Enquêtes Privées",
-];
+// Catégories dynamiques basées sur les articles
+const getCategories = (posts: SanityBlogPost[]) => {
+  const categories = new Set<string>();
+  posts.forEach(post => {
+    post.categories.forEach(cat => {
+      categories.add(cat.title);
+    });
+  });
+  return ["Tous les articles", ...Array.from(categories).sort()];
+};
 
-export default function BlogGrid() {
+interface BlogGridProps {
+  posts: SanityBlogPost[];
+}
+
+export default function BlogGrid({ posts }: BlogGridProps) {
   const [selectedCategory, setSelectedCategory] = useState("Tous les articles");
+
+  // Utiliser les vrais articles Sanity au lieu des données mockées
+  const allPosts = posts && posts.length > 0 ? posts : MOCK_POSTS;
+  const categories = getCategories(allPosts);
 
   const filteredPosts =
     selectedCategory === "Tous les articles"
-      ? MOCK_POSTS
-      : MOCK_POSTS.filter((post) =>
+      ? allPosts
+      : allPosts.filter((post) =>
           post.categories.some((cat) => cat.title === selectedCategory)
         );
 
@@ -187,7 +171,7 @@ export default function BlogGrid() {
           viewport={{ once: true }}
           className="mb-12 flex flex-wrap gap-3 justify-center"
         >
-          {CATEGORIES.map((category) => (
+          {categories.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
