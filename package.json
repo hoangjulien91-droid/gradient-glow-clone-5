@@ -5,9 +5,12 @@
     "scripts": {
         "dev": "next dev --turbopack",
         "build": "next build",
+        "build:analyze": "ANALYZE=true next build",
         "start": "next start",
         "lint": "next lint",
-        "analyze": "ANALYZE=true next build"
+        "lint:fix": "next lint --fix",
+        "type-check": "tsc --noEmit",
+        "preview": "next build && next start"
     },
     "dependencies": {
         "@babel/parser": "^7.28.4",

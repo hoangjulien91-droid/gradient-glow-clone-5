@@ -1,7 +1,4 @@
 import type { NextConfig } from "next";
-import path from "node:path";
-const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
-
 
 const nextConfig: NextConfig = {
   images: {
@@ -55,42 +52,18 @@ const nextConfig: NextConfig = {
       '@radix-ui/react-scroll-area',
       '@radix-ui/react-slot',
     ],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false, // Enable type checking in production
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false, // Enable linting in production
   },
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
-  webpack: (config) => {
-    // Stub optional peer and unused SDK to avoid bundling errors
-    config.resolve = config.resolve || {};
-    config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-      ['@react-email/render']: path.resolve(__dirname, 'src/shims/react-email-render.js'),
-      ['resend']: path.resolve(__dirname, 'src/shims/empty.js'),
-    };
-    return config;
-  },
-  turbopack: {
-    rules: {
-      "*.{jsx,tsx}": {
-        loaders: [LOADER]
-      }
-    }
-  }
+  swcMinify: true,
+  output: 'standalone', // Optimize for Vercel deployment
 };
 
 export default nextConfig;
-// Orchids restart: 1760986357426
