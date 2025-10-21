@@ -30,6 +30,8 @@ RESEND_API_KEY = re_4vCecTrb_JJW6mQp4xyU6CYBY3DD3GaRF
 ADMIN_EMAIL = julien.hoang@gmail.com
 ```
 
+**Note :** Les variables Resend ont des valeurs par défaut dans le code, donc l'application fonctionnera même sans les configurer dans Vercel.
+
 ### 3. Redéployer
 - Après avoir ajouté toutes les variables, redéployez votre application
 - Le build devrait maintenant réussir

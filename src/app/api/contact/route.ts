@@ -53,10 +53,12 @@ export async function POST(request: NextRequest) {
 
     // Helper to send email via Resend HTTP API (avoids SDK optional peer)
     const sendEmail = async (payload: Record<string, any>) => {
+      const resendApiKey = process.env.RESEND_API_KEY || 're_4vCecTrb_JJW6mQp4xyU6CYBY3DD3GaRF';
+      
       const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Authorization': `Bearer ${resendApiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
