@@ -123,17 +123,6 @@ const MOCK_POSTS: SanityBlogPost[] = [
   },
 ];
 
-// Catégories dynamiques basées sur les articles
-const getCategories = (posts: SanityBlogPost[]) => {
-  const categories = new Set<string>();
-  posts.forEach(post => {
-    post.categories.forEach(cat => {
-      categories.add(cat.title);
-    });
-  });
-  return ["Tous les articles", ...Array.from(categories).sort()];
-};
-
 interface BlogGridProps {
   posts: SanityBlogPost[];
 }
@@ -143,14 +132,43 @@ export default function BlogGrid({ posts }: BlogGridProps) {
 
   // Utiliser les vrais articles Sanity au lieu des données mockées
   const allPosts = posts && posts.length > 0 ? posts : MOCK_POSTS;
+  
+  // Catégories dynamiques basées sur les articles
+  const getCategories = (posts: SanityBlogPost[]) => {
+    try {
+      const categories = new Set<string>();
+      posts.forEach(post => {
+        if (post.categories && Array.isArray(post.categories)) {
+          post.categories.forEach(cat => {
+            if (cat && cat.title) {
+              categories.add(cat.title);
+            }
+          });
+        }
+      });
+      return ["Tous les articles", ...Array.from(categories).sort()];
+    } catch (error) {
+      console.error('Erreur lors de la génération des catégories:', error);
+      return ["Tous les articles"];
+    }
+  };
+  
   const categories = getCategories(allPosts);
 
-  const filteredPosts =
-    selectedCategory === "Tous les articles"
-      ? allPosts
-      : allPosts.filter((post) =>
-          post.categories.some((cat) => cat.title === selectedCategory)
-        );
+  const filteredPosts = (() => {
+    try {
+      if (selectedCategory === "Tous les articles") {
+        return allPosts;
+      }
+      return allPosts.filter((post) =>
+        post.categories && Array.isArray(post.categories) && 
+        post.categories.some((cat) => cat && cat.title === selectedCategory)
+      );
+    } catch (error) {
+      console.error('Erreur lors du filtrage des posts:', error);
+      return allPosts;
+    }
+  })();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -199,52 +217,64 @@ export default function BlogGrid({ posts }: BlogGridProps) {
             >
               {/* Image */}
               <div className="relative h-48 overflow-hidden">
-                <img
-                  src={post.mainImage.asset.url}
-                  alt={post.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
+                {post.mainImage?.asset?.url && (
+                  <img
+                    src={post.mainImage.asset.url}
+                    alt={post.title || 'Image article'}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                )}
                 {/* Category badge */}
-                <div className="absolute top-4 left-4">
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-medium text-accent-coral">
-                    <Tag className="w-3 h-3" />
-                    {post.categories[0].title}
-                  </span>
-                </div>
+                {post.categories && post.categories.length > 0 && post.categories[0]?.title && (
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-medium text-accent-coral">
+                      <Tag className="w-3 h-3" />
+                      {post.categories[0].title}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Content */}
               <div className="p-6">
                 {/* Meta info */}
                 <div className="flex items-center gap-4 mb-4 text-sm text-text-muted">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>{formatDate(post.publishedAt)}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{post.readingTime} min</span>
-                  </div>
+                  {post.publishedAt && (
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      <span>{formatDate(post.publishedAt)}</span>
+                    </div>
+                  )}
+                  {post.readingTime && (
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      <span>{post.readingTime} min</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Title */}
                 <h3 className="text-xl font-display font-bold text-text-dark mb-3 line-clamp-2 group-hover:text-accent-coral transition-colors">
-                  {post.title}
+                  {post.title || 'Titre non disponible'}
                 </h3>
 
                 {/* Excerpt */}
-                <p className="text-text-muted mb-6 line-clamp-3">
-                  {post.excerpt}
-                </p>
+                {post.excerpt && (
+                  <p className="text-text-muted mb-6 line-clamp-3">
+                    {post.excerpt}
+                  </p>
+                )}
 
                 {/* Read more link */}
-                <a
-                  href={`/blog/${post.slug.current}`}
-                  className="inline-flex items-center gap-2 text-accent-coral font-semibold hover:gap-3 transition-all group-hover:text-accent-blue"
-                >
-                  Lire l'article
-                  <ArrowRight className="w-4 h-4" />
-                </a>
+                {post.slug?.current && (
+                  <a
+                    href={`/blog/${post.slug.current}`}
+                    className="inline-flex items-center gap-2 text-accent-coral font-semibold hover:gap-3 transition-all group-hover:text-accent-blue"
+                  >
+                    Lire l'article
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                )}
               </div>
             </motion.article>
           ))}
