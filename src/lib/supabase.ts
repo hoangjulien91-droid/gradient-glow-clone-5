@@ -1,16 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!supabaseUrl) {
-  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable');
-}
-
-if (!supabaseAnonKey) {
-  throw new Error('Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable');
-}
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wpgtsqjcdosuegpophvv.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwZ3RzcWpjZG9zdWVncG9waHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwMTQ4MTIsImV4cCI6MjA3MzU5MDgxMn0.NDVPPOABuSsBUMTzCvbsrcTE7Kf2DuJYBR_JVPk3b0M';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwZ3RzcWpjZG9zdWVncG9waHZ2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODAxNDgxMiwiZXhwIjoyMDczNTkwODEyfQ.wUEG-t35GSsJ_KEJb83j_ylH7lw0HZdqOsjSHvX1Q6s';
 
 // Client-side Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -18,7 +10,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // Server-side Supabase client with service role (for API routes)
 export const supabaseAdmin = createClient(
   supabaseUrl,
-  supabaseServiceKey || supabaseAnonKey, // Fallback to anon key if service key not available
+  supabaseServiceKey,
   {
     auth: {
       autoRefreshToken: false,
